@@ -130,5 +130,68 @@ android:layout_height="wrap_content">
         app:layout_constraintLeft_toLeftOf="parent"
         android:text= "just(依次调用onNext)"/>
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_signle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_just"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "Single(单输入,单输出)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_debounce"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_signle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "debounce(去除发送频率过快的项)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_defer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_debounce"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "defer(每次订阅都创建新Observable)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_last"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_defer"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "last(可观察到最后一个或满足条件最后一项)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_merge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_last"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "merge(把多个Observable结合)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_reduce"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_merge"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "reduce(每次用一个方法处理一个值, 递归)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_scan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_reduce"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "scan(每次用一个方法处理一个值, 递归, 每步输出)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_window"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_scan"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "window(将数据发送给不同的Observable)"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

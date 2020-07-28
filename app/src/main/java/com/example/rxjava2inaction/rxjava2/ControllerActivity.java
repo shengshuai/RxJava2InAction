@@ -11,6 +11,8 @@ import com.example.rxjava2inaction.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -18,6 +20,8 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
@@ -100,6 +104,38 @@ public class ControllerActivity extends AppCompatActivity {
 
         findViewById(R.id.btn_just).setOnClickListener(v -> {
             just();
+        });
+
+        findViewById(R.id.btn_signle).setOnClickListener(v -> {
+            Single();
+        });
+
+        findViewById(R.id.btn_debounce).setOnClickListener(v -> {
+            debounce();
+        });
+
+        findViewById(R.id.btn_defer).setOnClickListener(v -> {
+            defer();
+        });
+
+        findViewById(R.id.btn_last).setOnClickListener(v -> {
+            last();
+        });
+
+        findViewById(R.id.btn_merge).setOnClickListener(v -> {
+            merge();
+        });
+
+        findViewById(R.id.btn_reduce).setOnClickListener(v -> {
+            reduce();
+        });
+
+        findViewById(R.id.btn_scan).setOnClickListener(v -> {
+            scan();
+        });
+
+        findViewById(R.id.btn_window).setOnClickListener(v -> {
+            window();
         });
     }
 
@@ -427,6 +463,163 @@ public class ControllerActivity extends AppCompatActivity {
                 });
     }
 
+    //顾名思义，Single 只会接收一个参数，而 SingleObserver 只会调用 onError() 或者 onSuccess()
+    void Single(){
+        Single.just(new Random().nextInt())
+                .subscribe(new SingleObserver<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
+                    }
+
+                    @Override
+                    public void onSuccess(Integer integer) {
+                        Log.e(TAG, "single : onSuccess : "+integer+"\n" );
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, "single : onError : "+e.getMessage()+"\n");
+                    }
+                });
+    };
+
+    //去除发送频率过快的项
+    void debounce(){
+        Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+                emitter.onNext(1); // skip
+                Thread.sleep(400);
+                emitter.onNext(2); // deliver
+                Thread.sleep(505);
+                emitter.onNext(3); // skip
+                Thread.sleep(100);
+                emitter.onNext(4); // deliver
+                Thread.sleep(605);
+                emitter.onNext(5); // deliver
+                Thread.sleep(510);
+                emitter.onComplete();
+            }
+        }).debounce(500, TimeUnit.MILLISECONDS) //去除发送间隔时间小于 500 毫秒的发射事件
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Consumer<Integer>() {
+            @Override
+            public void accept(Integer integer) throws Exception {
+                Log.e(TAG,"debounce :" + integer + "\n");
+            }
+        });
+    };
+
+    //简单地时候就是每次订阅都会创建一个新的 Observable，并且如果没有被订阅，就不会产生新的 Observable。
+    void defer(){
+        Observable<Integer> observable = Observable.defer(new Callable<ObservableSource<? extends Integer>>() {
+            @Override
+            public ObservableSource<? extends Integer> call() throws Exception {
+                return Observable.just(1, 2, 3);
+            }
+        });
+
+        observable.subscribe(new Observer<Integer>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(Integer integer) {
+                Log.e(TAG, "defer : " + integer + "\n");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, "defer : onError : " + e.getMessage() + "\n");
+            }
+
+            @Override
+            public void onComplete() {
+                Log.e(TAG, "defer : onComplete\n");
+            }
+        });
+
+    };
+
+    //取出可观察到的最后一个值，或者是满足某些条件的最后一项。
+    void last(){
+        Observable.just(1, 2, 3)
+                .last(4)
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+                        Log.e(TAG, "last : " + integer + "\n");
+                    }
+                });
+    };
+
+    //merge 的作用是把多个 Observable 结合起来，接受可变参数，也支持迭代器集合。注意它和 concat 的区别在于，不用等到 发射器 A 发送完所有的事件再进行发射器 B 的发送。
+    void merge(){
+        Observable.merge(Observable.just(1, 2), Observable.just(3, 4, 5))
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+                        Log.e(TAG, "accept: merge :" + integer + "\n" );
+                    }
+                });
+    };
+    //reduce 操作符每次用一个方法处理一个值，可以有一个 seed 作为初始值。
+    void reduce(){
+        Observable.just(1, 2, 3)
+                .reduce(new BiFunction<Integer, Integer, Integer>() {
+                    @Override
+                    public Integer apply(Integer integer, Integer integer2) throws Exception {
+                        return integer + integer2;
+                    }
+                }).subscribe(new Consumer<Integer>() {
+            @Override
+            public void accept(Integer integer) throws Exception {
+                Log.e(TAG, "accept: reduce : " + integer + "\n");
+            }
+        });
+    };
+    //scan 操作符作用和上面的 reduce 一致，唯一区别是 reduce 是个只追求结果的坏人，而 scan 会始终如一地把每一个步骤都输出
+    void scan(){
+        Observable.just(1, 2, 3)
+                .scan(new BiFunction<Integer, Integer, Integer>() {
+                    @Override
+                    public Integer apply(Integer integer, Integer integer2) throws Exception {
+                        Log.e(TAG, "apply: scan : " + integer + "\n");
+                        return integer + integer2;
+                    }
+                }).subscribe(new Consumer<Integer>() {
+            @Override
+            public void accept(Integer integer) throws Exception {
+                Log.e(TAG, "accept: scan : " + integer + "\n");
+            }
+        });
+    };
+
+    //按照实际划分窗口，将数据发送给不同的 Observable
+    void window(){
+        Observable.interval(1, TimeUnit.SECONDS) //1s一次
+                .take(15) //最多15个
+                .window(3, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Observable<Long>>() {
+                    @Override
+                    public void accept(Observable<Long> longObservable) throws Exception {
+                        Log.e(TAG, "Sub Divide begin...\n");
+                        longObservable.subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Consumer<Long>() {
+                                    @Override
+                                    public void accept(Long aLong) throws Exception {
+                                        Log.e(TAG, "Next:" + aLong + "\n");
+                                    }
+                                });
+                    }
+                });
+    };
 
 }
