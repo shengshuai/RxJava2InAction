@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="wrap_content">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".MainActivity">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_create"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "Create(生成Obserable)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_map"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_create"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "Map(Observable函数转换)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_zip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_map"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "Zip(按少的合并发射)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_concat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_zip"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "Concat(连接发射)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_faltmap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_concat"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "FlatMap(分散乱序)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_concatmap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_faltmap"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "ConcatMap(分散有序)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_distinct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_concatmap"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "distinct(去重)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_distinct"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "Filter(过滤器)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_buffer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_filter"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "buffer(按照count,skip分组)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_timer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_buffer"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "timer(定时任务)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_interval"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_timer"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "interval(间隔时间执行)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_doOnNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_interval"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "doOnNext(收到数据之前干点啥)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_skip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_doOnNext"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "skip(跳过)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_take"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_skip"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "take(最多接受)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_just"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btn_take"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text= "just(依次调用onNext)"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
