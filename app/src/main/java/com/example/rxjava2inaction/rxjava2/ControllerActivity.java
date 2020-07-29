@@ -620,6 +620,6 @@ public class ControllerActivity extends AppCompatActivity {
                                 });
                     }
                 });
-    };
+    }
 
 }
